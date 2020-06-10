@@ -120,7 +120,6 @@ h1 {
   font-size: 12px;
   .search {
     display: flex;
-    flex-direction: column;
   }
   input {
     padding: 8px;
@@ -138,6 +137,7 @@ h1 {
     .inputs {
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
     }
     .distance {
       background-color: white;
@@ -189,6 +189,24 @@ p.legend {
 }
 
 .radios-directions {
+  background-color: white;
+}
+
+.units-system {
+  margin: 8px;
+  background-color: white;
+}
+
+.transit-modes {
+  margin: 8px;
+  background-color: white;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   background-color: white;
 }
 

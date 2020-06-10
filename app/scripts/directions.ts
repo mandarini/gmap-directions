@@ -4,6 +4,10 @@ export function directionCalculator(map: google.maps.Map) {
   directionsRenderer.setMap(map);
 
   let chosenTravelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING;
+  let chosenUnitSystem: google.maps.UnitSystem = 0;
+  let chosenTrafficModel: google.maps.TrafficModel =
+    google.maps.TrafficModel.BEST_GUESS;
+  let chosenTransit: google.maps.TransitMode = google.maps.TransitMode.BUS;
 
   const service: google.maps.DistanceMatrixService = new google.maps.DistanceMatrixService();
 
@@ -21,6 +25,9 @@ export function directionCalculator(map: google.maps.Map) {
       autocomplete_input_origin,
       autocomplete_input_destination,
       chosenTravelMode,
+      chosenUnitSystem,
+      chosenTrafficModel,
+      chosenTransit,
     );
   };
 
@@ -74,16 +81,143 @@ export function directionCalculator(map: google.maps.Map) {
       autocomplete_destination.setOptions({ strictBounds: target.checked });
     });
 
-  const radios: NodeListOf<HTMLInputElement> = document.getElementsByName(
+  const travelModeRadios: NodeListOf<HTMLInputElement> = document.getElementsByName(
     "directionsMode",
   ) as NodeListOf<HTMLInputElement>;
 
-  for (var i = 0, length = radios.length; i < length; i++) {
-    radios[i].addEventListener("change", (event) => {
-      console.log(event, radios[i]);
+  for (var i = 0, length = travelModeRadios.length; i < length; i++) {
+    travelModeRadios[i].addEventListener("change", (event) => {
       const target: HTMLInputElement = event.target as HTMLInputElement;
       console.log(target.id, target.value);
       chosenTravelMode = target.value as google.maps.TravelMode;
+      if (
+        directionsService &&
+        directionsRenderer &&
+        service &&
+        autocomplete_input_origin &&
+        autocomplete_input_destination &&
+        chosenTravelMode &&
+        chosenUnitSystem &&
+        chosenTrafficModel &&
+        chosenTransit
+      ) {
+        calculateAndDisplayRoute(
+          directionsService,
+          directionsRenderer,
+          service,
+          autocomplete_input_origin,
+          autocomplete_input_destination,
+          chosenTravelMode,
+          chosenUnitSystem,
+          chosenTrafficModel,
+          chosenTransit,
+        );
+      }
+    });
+  }
+
+  const unitRadios: NodeListOf<HTMLInputElement> = document.getElementsByName(
+    "unitSystem",
+  ) as NodeListOf<HTMLInputElement>;
+
+  for (var i = 0, length = unitRadios.length; i < length; i++) {
+    unitRadios[i].addEventListener("change", (event) => {
+      const target: HTMLInputElement = event.target as HTMLInputElement;
+      console.log(target.id, target.value);
+      chosenUnitSystem = (target.value as unknown) as google.maps.UnitSystem;
+      if (
+        directionsService &&
+        directionsRenderer &&
+        service &&
+        autocomplete_input_origin &&
+        autocomplete_input_destination &&
+        chosenTravelMode &&
+        chosenUnitSystem &&
+        chosenTrafficModel &&
+        chosenTransit
+      ) {
+        calculateAndDisplayRoute(
+          directionsService,
+          directionsRenderer,
+          service,
+          autocomplete_input_origin,
+          autocomplete_input_destination,
+          chosenTravelMode,
+          chosenUnitSystem,
+          chosenTrafficModel,
+          chosenTransit,
+        );
+      }
+    });
+  }
+
+  const transitModeRadios: NodeListOf<HTMLInputElement> = document.getElementsByName(
+    "transitMode",
+  ) as NodeListOf<HTMLInputElement>;
+
+  for (var i = 0, length = transitModeRadios.length; i < length; i++) {
+    transitModeRadios[i].addEventListener("change", (event) => {
+      const target: HTMLInputElement = event.target as HTMLInputElement;
+      console.log(target.id, target.value);
+      chosenTransit = (target.value as unknown) as google.maps.TransitMode;
+      if (
+        directionsService &&
+        directionsRenderer &&
+        service &&
+        autocomplete_input_origin &&
+        autocomplete_input_destination &&
+        chosenTravelMode &&
+        chosenUnitSystem &&
+        chosenTrafficModel &&
+        chosenTransit
+      ) {
+        calculateAndDisplayRoute(
+          directionsService,
+          directionsRenderer,
+          service,
+          autocomplete_input_origin,
+          autocomplete_input_destination,
+          chosenTravelMode,
+          chosenUnitSystem,
+          chosenTrafficModel,
+          chosenTransit,
+        );
+      }
+    });
+  }
+
+  const trafficModelRadios: NodeListOf<HTMLInputElement> = document.getElementsByName(
+    "trafficModel",
+  ) as NodeListOf<HTMLInputElement>;
+
+  for (var i = 0, length = trafficModelRadios.length; i < length; i++) {
+    trafficModelRadios[i].addEventListener("change", (event) => {
+      const target: HTMLInputElement = event.target as HTMLInputElement;
+      console.log(target.id, target.value);
+      chosenTrafficModel = (target.value as unknown) as google.maps.TrafficModel;
+      if (
+        directionsService &&
+        directionsRenderer &&
+        service &&
+        autocomplete_input_origin &&
+        autocomplete_input_destination &&
+        chosenTravelMode &&
+        chosenUnitSystem &&
+        chosenTrafficModel &&
+        chosenTransit
+      ) {
+        calculateAndDisplayRoute(
+          directionsService,
+          directionsRenderer,
+          service,
+          autocomplete_input_origin,
+          autocomplete_input_destination,
+          chosenTravelMode,
+          chosenUnitSystem,
+          chosenTrafficModel,
+          chosenTransit,
+        );
+      }
     });
   }
 }
@@ -95,6 +229,9 @@ function calculateAndDisplayRoute(
   origin: HTMLInputElement,
   destination: HTMLInputElement,
   chosenTravelMode: google.maps.TravelMode,
+  chosenUnitSystem: google.maps.UnitSystem,
+  chosenTrafficModel: google.maps.TrafficModel,
+  chosenTransit: google.maps.TransitMode,
 ) {
   if (
     origin.value &&
@@ -107,6 +244,13 @@ function calculateAndDisplayRoute(
         origin: { query: origin.value },
         destination: { query: destination.value },
         travelMode: chosenTravelMode,
+        transitOptions: {
+          modes: [chosenTransit],
+        },
+        drivingOptions: {
+          departureTime: new Date(),
+          trafficModel: chosenTrafficModel,
+        },
       },
       (response: any, status: any) => {
         if (status === "OK") {
@@ -116,9 +260,10 @@ function calculateAndDisplayRoute(
               origins: [origin.value],
               destinations: [destination.value],
               travelMode: chosenTravelMode,
-              unitSystem: google.maps.UnitSystem.METRIC,
+              unitSystem: chosenUnitSystem,
             },
             (response, status) => {
+              console.log(response);
               if (status !== "OK") {
                 alert("Error was: " + status);
               } else {
