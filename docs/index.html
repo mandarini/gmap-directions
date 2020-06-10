@@ -32,51 +32,6 @@
   <body>
     <main>
       <div id="controls" class="controls">
-        <div>
-          <p>City Chooser</p>
-          <button id="city-lon">London</button>
-          <button id="city-man">Manchester</button>
-        </div>
-        <div>
-          <p>Theme Chooser</p>
-          <button id="lights">
-            Lights on/off
-          </button>
-        </div>
-        <div class="masts">
-          <p>Masts</p>
-          <button id="masts-toggle">
-            Hide/Show Masts
-          </button>
-          <button id="cluster-toggle">
-            Hide/Show Cluster
-          </button>
-          <label for="clusters">Grid size</label>
-          <input
-            id="cluster-range"
-            type="range"
-            name="clusters"
-            min="0"
-            max="250"
-          />
-        </div>
-        <div>
-          <p>
-            Rents
-          </p>
-          <button id="heatmap-toggle">
-            Hide/Show Rent Heatmap
-          </button>
-          <label for="Radius">Heatmap radius</label>
-          <input
-            id="heatmap-range"
-            type="range"
-            name="Radius"
-            min="0"
-            max="70"
-          />
-        </div>
-
         <div class="codes">
           <a href="https://github.com/mandarini/gmap-vanilla" target="_blank"
             >gimme teh codez</a
@@ -85,10 +40,43 @@
       </div>
       <div id="place-search" class="search-places">
         <div class="search">
-          <input id="place-input" type="text" placeholder="Enter a location" />
+          <!-- <input id="place-input" type="text" placeholder="Enter a location" /> -->
           <div class="strict-select">
             <input type="checkbox" id="use-strict-bounds" value="" />
             <label for="use-strict-bounds">Strict Bounds</label>
+          </div>
+          <div class="radios-directions">
+            <div>
+              <input
+                type="radio"
+                id="BICYCLING"
+                name="directionsMode"
+                value="BICYCLING"
+                checked
+              />
+              <label for="BICYCLING">BICYCLING</label>
+            </div>
+            <div>
+              <input type="radio" id="DRIVING" name="directionsMode" value="DRIVING" />
+              <label for="DRIVING">DRIVING</label>
+            </div>
+            <div>
+              <input type="radio" id="TRANSIT" name="directionsMode" value="TRANSIT" />
+              <label for="TRANSIT">TRANSIT</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="TWO_WHEELER"
+                name="directionsMode"
+                value="TWO_WHEELER"
+              />
+              <label for="TWO_WHEELER">TWO_WHEELER</label>
+            </div>
+            <div>
+              <input type="radio" id="WALKING" name="directionsMode" value="WALKING" />
+              <label for="WALKING">WALKING</label>
+            </div>
           </div>
         </div>
         <div class="directions">
@@ -106,7 +94,6 @@
         </div>
       </div>
 
-      <div id="drawingControls" class="drawing"></div>
       <div id="map" class="map"></div>
       <div id="infowindow-content">
         <img src="" width="16" height="16" id="place-icon" />
